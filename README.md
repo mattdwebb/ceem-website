@@ -20,7 +20,7 @@ node scripts/validate-site.mjs / false https://ceem.ca
 node scripts/audit-links.mjs
 ```
 
-Pushes to `main` and pull requests run read-only GitHub Actions validation. There is intentionally no Pages deployment workflow until launch approval. The link audit checks transport and redirects, not subscriber-only content or whether a contact inbox accepts mail.
+Pushes to `main` and pull requests run read-only GitHub Actions validation. The separate Pages workflow builds and publishes only from `main`; it uses `SITE_URL=https://ceem.ca` and `BASE_PATH=/`. The link audit checks transport and redirects, not subscriber-only content or whether a contact inbox accepts mail.
 
 ## Netlify collaborator review
 
@@ -39,14 +39,16 @@ Choose who can visit the review site in Netlify at **Project configuration > Gen
 
 ## Production launch
 
-This public repository has a fresh history so the private review repository's commit metadata is not published. The source files are visible on GitHub, but GitHub Pages is disabled and no deployment workflow is present. Do not enable Pages, add a deployment workflow, or point `ceem.ca` to GitHub until the owner explicitly approves launch. The Netlify review site keeps its bilingual draft notice; GitHub Pages builds do not display it.
+This public repository has a fresh history so the private review repository's commit metadata is not published. The owner approved launch on 13 October 2026. The Netlify review site keeps its bilingual draft notice; GitHub Pages builds do not display it.
 
-`ceem.ca` is registered by Christopher Worswick. [Verify it in the `mattdwebb` account's Pages settings](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages): Christopher, or whoever manages DNS, must add the GitHub-provided TXT record and keep it. Verification alone does not launch a Pages site. Keep the current parked apex and `www` records unchanged until launch.
+`ceem.ca` is registered by Christopher Worswick and has been verified in the `mattdwebb` account's GitHub Pages settings. Keep the `_github-pages-challenge-mattdwebb` TXT record in DNS. Verification alone does not launch a Pages site.
 
-At approved launch, add a static Astro GitHub Actions deployment workflow with `SITE_URL=https://ceem.ca` and `BASE_PATH=/`, enable GitHub Pages with **GitHub Actions** as its source, and [set the repository's custom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site) before changing DNS. An Actions publishing source does not need a `CNAME` file. Replace the parked apex record with GitHub's then-current documented `A` records and point `www` to `mattdwebb.github.io`, not to the repository path or apex. After propagation, check both hostnames, redirects, canonical URLs, navigation, language switching, assets, and Enforce HTTPS. Do not leave an unverified custom domain pointed at a disabled Pages site.
+The repository's Pages source must be **GitHub Actions**, with custom domain `ceem.ca` set before changing DNS. An Actions publishing source does not need a `CNAME` file. At the DNS provider, remove the parked `@` A record (`149.56.225.6`) and add four `@` A records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`. Change the `www` CNAME from `ceem.ca` to `mattdwebb.github.io` (not to the repository path or apex). Leave the MX, SPF, verification TXT, NS, and unrelated records untouched. These are [GitHub's documented IPv4 records](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site); recheck them before any later DNS change.
+
+After DNS propagation, confirm both `https://ceem.ca/` and `https://www.ceem.ca/`, the redirect to the apex, canonical URLs, navigation, language switching, images, and Enforce HTTPS in repository Pages settings. Certificate provisioning can take time after DNS changes. Do not announce the site as live until these checks pass.
 
 The existing Netlify review site continues to build from the private repository until its GitHub integration is deliberately reconnected. Do not assume it previews changes made only in this public repository.
 
-Before launch, obtain owner review of institutional status and any governance wording, the public CIRP summary and French copy, a manual delivery test for the confirmed `chris.worswick@carleton.ca` contact address, and a confirmed CEEM LinkedIn page URL. Resolve review-site integration, DNS, HTTPS, and explicit production approval. The former mailing-list form has been removed; no signup service is active.
+Follow-up checks: confirm institutional status and governance wording, the public CIRP summary and French copy, manual mail delivery to `chris.worswick@carleton.ca`, and the CEEM LinkedIn page URL. Resolve DNS, HTTPS, and any review-site integration change separately. The former mailing-list form has been removed; no signup service is active.
 
 Content is maintained in `src/data/`. Membership in CEEM and CIRP is explicit in `people.ts`; the CIRP participant list is generated from those same records. Shared routes, branding paths, and translations are in `site.ts`; deployment origin and base path are configured in `astro.config.mjs`. Existing non-program routes are unchanged.
