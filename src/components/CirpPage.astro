@@ -1,0 +1,55 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { getMembersOf } from "../data/people";
+import { partners } from "../data/partners";
+import { getDictionary } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+const participants = getMembersOf("cirp");
+const programPartners = [...partners].sort((left, right) => left.sortOrder - right.sortOrder);
+---
+
+<Layout locale={locale} routeKey="cirp" title={dict.cirp.title} description={dict.cirp.intro}>
+  <PageIntro eyebrow={dict.cirp.eyebrow} title={dict.cirp.title} intro={dict.cirp.intro} />
+
+  <div class="program-layout">
+    <article class="info-card program-overview">
+      <p class="program-funding">{dict.cirp.funding}</p>
+      <h2>{dict.cirp.scopeTitle}</h2>
+      {dict.cirp.scope.map((paragraph) => <p>{paragraph}</p>)}
+      <h2>{dict.cirp.aimsTitle}</h2>
+      <ol class="aim-list">
+        {dict.cirp.aims.map((aim) => <li>{aim}</li>)}
+      </ol>
+    </article>
+
+    <aside class="program-sidebar">
+      <section class="info-card">
+        <h2>{dict.cirp.partnersTitle}</h2>
+        <ul class="program-list">
+          {programPartners.map((partner) => (
+            <li>
+              <a href={partner.url} target="_blank" rel="noreferrer">{locale === "fr" ? partner.nameFr ?? partner.name : partner.name}</a>
+              <span>{partner.category === "funder" ? dict.partners.funderLabel : dict.partners.partnerLabel}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section class="info-card">
+        <h2>{dict.cirp.participantsTitle}</h2>
+        <p>{dict.cirp.languageNote}</p>
+        <ul class="program-list program-list--people">
+          {participants.map((person) => <li>{person.name}</li>)}
+        </ul>
+      </section>
+    </aside>
+  </div>
+</Layout>

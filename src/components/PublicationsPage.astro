@@ -1,0 +1,52 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { getDictionary } from "../data/site";
+import { publications } from "../data/publications";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+---
+
+<Layout
+  locale={locale}
+  routeKey="publications"
+  title={dict.pageTitles.publications}
+  description={dict.pageIntro.publications}
+>
+  <PageIntro
+    title={dict.pageTitles.publications}
+    intro={dict.pageIntro.publications}
+  />
+
+  {publications.length === 0 && (
+    <section class="empty-state">
+      <h2>{dict.publications.emptyTitle}</h2>
+      <p>{dict.publications.emptyBody}</p>
+    </section>
+  )}
+
+  {publications.length > 0 && (
+    <section class="publication-grid">
+      {publications.map((publication) => (
+        <article class="publication-card">
+          <p class="publication-card__type">{locale === "fr" ? "Rapport de recherche" : publication.type} · {publication.year}</p>
+          <h2>{locale === "fr" ? publication.titleFr : publication.titleEn}</h2>
+          <p>{publication.authors.join(", ")}</p>
+          <p>{publication.outlet}</p>
+          {publication.url && (
+            <a class="text-link" href={publication.url} target="_blank" rel="noreferrer">
+              {dict.publications.viewItem}
+            </a>
+          )}
+        </article>
+      ))}
+    </section>
+  )}
+</Layout>

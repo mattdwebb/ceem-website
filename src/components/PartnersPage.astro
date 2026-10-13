@@ -1,0 +1,43 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { partners } from "../data/partners";
+import { getDictionary, getPath } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+const orderedPartners = [...partners].sort((left, right) => left.sortOrder - right.sortOrder);
+---
+
+<Layout
+  locale={locale}
+  routeKey="partners"
+  title={dict.pageTitles.partners}
+  description={dict.pageIntro.partners}
+>
+  <PageIntro title={dict.partners.heading} intro={dict.pageIntro.partners} />
+  <p><a class="text-link" href={getPath(locale, "cirp", { localizedEnglish: true })}>{dict.partners.programLink}</a></p>
+
+  <section class="partner-grid">
+    {
+      orderedPartners.map((partner) => (
+        <article class="partner-card">
+          <p class="partner-card__type">
+            {partner.category === "funder" ? dict.partners.funderLabel : dict.partners.partnerLabel}
+          </p>
+          <h2>{locale === "fr" ? partner.nameFr ?? partner.name : partner.name}</h2>
+          <p>{locale === "fr" ? partner.summaryFr : partner.summaryEn}</p>
+          <a class="text-link" href={partner.url} target="_blank" rel="noreferrer">
+            {dict.learnMore}
+          </a>
+        </article>
+      ))
+    }
+  </section>
+</Layout>

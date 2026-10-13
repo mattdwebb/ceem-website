@@ -1,0 +1,62 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { newsItems } from "../data/news";
+import { getDictionary } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+const orderedNews = [...newsItems].sort((left, right) => right.date.localeCompare(left.date));
+
+function formatDate(date: string, currentLocale: Locale) {
+  return new Intl.DateTimeFormat(currentLocale === "fr" ? "fr-CA" : "en-CA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(`${date}T00:00:00`));
+}
+
+function formatType(type: string, currentLocale: Locale) {
+  if (currentLocale === "en") return type;
+  return {
+    Podcast: "Balado",
+    Interview: "Entrevue",
+    Quoted: "Citation",
+    "Intelligence Memo": "Note de politique",
+  }[type] ?? type;
+}
+---
+
+<Layout
+  locale={locale}
+  routeKey="news"
+  title={dict.pageTitles.news}
+  description={dict.pageIntro.news}
+>
+  <PageIntro title={dict.pageTitles.news} intro={dict.pageIntro.news} />
+
+  <section class="news-grid">
+    {
+      orderedNews.map((item) => (
+        <article class="news-card">
+          <div class="news-card__meta">
+            <span>{item.source}</span>
+            <span>{formatDate(item.date, locale)}</span>
+          </div>
+          <h2>{locale === "fr" ? item.titleFr : item.titleEn}</h2>
+          <p class="news-card__people">{item.people.join(", ")}</p>
+          <p class="news-card__type">{formatType(item.type, locale)}</p>
+          <a class="text-link" href={item.url} target="_blank" rel="noreferrer">
+            {dict.news.viewItem}
+          </a>
+        </article>
+      ))
+    }
+  </section>
+</Layout>

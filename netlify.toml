@@ -1,0 +1,13 @@
+[build]
+  command = "npm run check && npm run build"
+  publish = "dist"
+
+[build.environment]
+  BASE_PATH = "/"
+  NODE_VERSION = "24"
+  PUBLIC_REVIEW_SITE = "true"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

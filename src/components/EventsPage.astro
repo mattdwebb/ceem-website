@@ -1,0 +1,28 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { getDictionary } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+---
+
+<Layout
+  locale={locale}
+  routeKey="events"
+  title={dict.pageTitles.events}
+  description={dict.pageIntro.events}
+>
+  <PageIntro title={dict.pageTitles.events} intro={dict.pageIntro.events} />
+
+  <section class="empty-state">
+    <h2>{dict.pageTitles.events}</h2>
+    <p>{dict.pageIntro.events}</p>
+  </section>
+</Layout>

@@ -1,0 +1,52 @@
+# CEEM website
+
+The Centre for Economic Evidence on Migration (CEEM) website presents the centre in English and French. Its current SSHRC Partnership Development Grant-funded research program, the Canadian Immigration Research Program (CIRP; PCRI in French), has dedicated pages at `/en/cirp/` and `/fr/cirp/`. The site is fully static and built with [Astro](https://astro.build/).
+
+## Local development
+
+```sh
+npm ci
+npm run dev
+```
+
+The local build uses `https://ceem.ca/` and `/` by default. This sets the eventual production origin; it does not publish the site. Override `SITE_URL` and `BASE_PATH` when testing another origin or path.
+
+## Validation
+
+```sh
+npm run check
+npm run build
+node scripts/validate-site.mjs / false https://ceem.ca
+node scripts/audit-links.mjs
+```
+
+Pushes to `main` and pull requests run read-only GitHub Actions validation. There is intentionally no Pages deployment workflow until launch approval. The link audit checks transport and redirects, not subscriber-only content or whether a contact inbox accepts mail.
+
+## Netlify collaborator review
+
+The existing Netlify review site is still connected to the separate, private `mattdwebb/cirp-website` repository. This public repository does not automatically update that site or receive Deploy Previews. To reconnect the review site to `mattdwebb/ceem-website` later, use **Project configuration > Build & deploy > Continuous deployment > Repository** in Netlify and confirm these settings:
+
+- Production branch: `main` (this Netlify branch deploy is still a review site).
+- Base directory: repository root (leave the field empty); package directory: leave empty.
+- Build command: `npm run check && npm run build`.
+- Publish directory: `dist`.
+- Node.js: 24; `BASE_PATH=/`. Both are set globally in `netlify.toml`, including for Deploy Previews.
+- Leave `SITE_URL` unset unless you need an explicit origin override. Astro uses Netlify's `DEPLOY_PRIME_URL`, then `URL`, at build time.
+
+Once connected, the main review URL updates after each successful push to `main`. Later pull requests targeting `main` receive Deploy Previews by default; each preview URL updates after successful pushes to that pull request. Review links appear in Netlify's deploy view and normally in the pull request. These builds use the preview's own origin and the same root path.
+
+Choose who can visit the review site in Netlify at **Project configuration > General > Visitor access > Project visibility** (or **Password Protection**, depending on the plan). Apply the choice to **all deploys**, including the main branch and Deploy Previews. `netlify.toml` sets `X-Robots-Tag: noindex, nofollow` on all paths, but noindex is not access control; use Netlify visitor access settings if review content must be restricted.
+
+## Production launch
+
+This public repository has a fresh history so the private review repository's commit metadata is not published. The source files are visible on GitHub, but GitHub Pages is disabled and no deployment workflow is present. Do not enable Pages, add a deployment workflow, or point `ceem.ca` to GitHub until the owner explicitly approves launch. The Netlify review site keeps its bilingual draft notice; GitHub Pages builds do not display it.
+
+`ceem.ca` is registered by Christopher Worswick. [Verify it in the `mattdwebb` account's Pages settings](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages): Christopher, or whoever manages DNS, must add the GitHub-provided TXT record and keep it. Verification alone does not launch a Pages site. Keep the current parked apex and `www` records unchanged until launch.
+
+At approved launch, add a static Astro GitHub Actions deployment workflow with `SITE_URL=https://ceem.ca` and `BASE_PATH=/`, enable GitHub Pages with **GitHub Actions** as its source, and [set the repository's custom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site) before changing DNS. An Actions publishing source does not need a `CNAME` file. Replace the parked apex record with GitHub's then-current documented `A` records and point `www` to `mattdwebb.github.io`, not to the repository path or apex. After propagation, check both hostnames, redirects, canonical URLs, navigation, language switching, assets, and Enforce HTTPS. Do not leave an unverified custom domain pointed at a disabled Pages site.
+
+The existing Netlify review site continues to build from the private repository until its GitHub integration is deliberately reconnected. Do not assume it previews changes made only in this public repository.
+
+Before launch, obtain owner review of institutional status and any governance wording, the public CIRP summary and French copy, a manual delivery test for the confirmed `chris.worswick@carleton.ca` contact address, and a confirmed CEEM LinkedIn page URL. Resolve review-site integration, DNS, HTTPS, and explicit production approval. The former mailing-list form has been removed; no signup service is active.
+
+Content is maintained in `src/data/`. Membership in CEEM and CIRP is explicit in `people.ts`; the CIRP participant list is generated from those same records. Shared routes, branding paths, and translations are in `site.ts`; deployment origin and base path are configured in `astro.config.mjs`. Existing non-program routes are unchanged.

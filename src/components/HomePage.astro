@@ -1,0 +1,95 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { getDictionary, getPath, navOrder, siteConfig } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+  localizedEnglishHome?: boolean;
+}
+
+const { locale, localizedEnglishHome = false } = Astro.props;
+const dict = getDictionary(locale);
+---
+
+<Layout
+  locale={locale}
+  routeKey="home"
+  title={dict.pageTitles.home}
+  description={dict.home.intro}
+  localizedEnglishHome={localizedEnglishHome}
+>
+  <section class="hero">
+    <div class="hero__copy">
+      <PageIntro
+        eyebrow={dict.home.eyebrow}
+        title={dict.home.title}
+        intro={dict.home.intro}
+      />
+      <div class="hero__actions">
+        <a class="button button--primary" href={getPath(locale, "team", { localizedEnglish: true })}>
+          {dict.home.primaryCta}
+        </a>
+        <a class="button button--secondary" href={getPath(locale, "cirp", { localizedEnglish: true })}>
+          {dict.home.secondaryCta}
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__art">
+      <div class="hero__logo-frame">
+        <img
+          src={siteConfig.heroLogo}
+          alt={locale === "fr" ? "Logo bilingue du CEEM" : "Bilingual CEEM logo"}
+          width="1698"
+          height="926"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="program-feature" aria-labelledby="program-feature-title">
+    <p class="page-intro__eyebrow">{dict.home.programEyebrow}</p>
+    <h2 id="program-feature-title">{dict.home.programTitle}</h2>
+    <p>{dict.home.programIntro}</p>
+    <a class="button button--primary" href={getPath(locale, "cirp", { localizedEnglish: true })}>
+      {dict.home.programCta}
+    </a>
+  </section>
+
+  <section class="info-grid">
+    <article class="info-card info-card--tall">
+      <h2>{dict.home.aimsTitle}</h2>
+      <ol class="aim-list">
+        {dict.home.aims.map((aim) => <li>{aim}</li>)}
+      </ol>
+    </article>
+
+    <article class="info-card">
+      <h2>{dict.home.overviewTitle}</h2>
+      <p>{dict.home.overview}</p>
+    </article>
+  </section>
+
+  <section class="section-grid-wrap">
+    <div class="section-grid__intro">
+      <h2>{dict.home.sectionTitle}</h2>
+      <p>{dict.home.sectionIntro}</p>
+    </div>
+    <div class="section-grid">
+      {
+        navOrder.map((item) => (
+          <a
+            href={getPath(locale, item, { localizedEnglish: true })}
+            class="section-card"
+          >
+            <span class="section-card__kicker">{dict.pageTitles[item]}</span>
+            <strong>{dict.home.sectionBlurb[item]}</strong>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,144 @@
+---
+import "../styles/global.css";
+
+import { getAlternatePath, getDictionary, getPath, navOrder, siteConfig } from "../data/site";
+import type { Locale, RouteKey } from "../data/types";
+
+interface Props {
+  locale: Locale;
+  routeKey: RouteKey;
+  title: string;
+  description: string;
+  localizedEnglishHome?: boolean;
+}
+
+const {
+  locale,
+  routeKey,
+  title,
+  description,
+  localizedEnglishHome = false,
+} = Astro.props;
+
+const dict = getDictionary(locale);
+const englishHref = getPath("en", routeKey, {
+  localizedEnglish: routeKey === "home" ? localizedEnglishHome : true,
+});
+const frenchHref = getAlternatePath("en", routeKey, { localizedEnglish: true });
+const homeHref = getPath(locale, "home", {
+  localizedEnglish: locale === "en" ? localizedEnglishHome : true,
+});
+const isNetlifyReview = import.meta.env.PUBLIC_REVIEW_SITE === "true";
+const logoAlt = locale === "fr" ? "Logo bilingue du CEEM" : "Bilingual CEEM logo";
+const socialImage = new URL(siteConfig.heroLogo, Astro.site).href;
+const canonicalUrl = new URL(
+  getPath(locale, routeKey, { localizedEnglish: localizedEnglishHome || routeKey !== "home" }),
+  Astro.site,
+).href;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href={siteConfig.markLogo} />
+    <title>{title} | {dict.brand}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} | ${dict.brand}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImage} />
+  </head>
+  <body>
+    <div class="page-shell">
+      {
+        isNetlifyReview && (
+          <p class="review-notice">
+            {locale === "fr"
+              ? "Ébauche — pour examen par les collaborateurs"
+              : "Draft — for collaborator review"}
+          </p>
+        )
+      }
+      <header class="site-header">
+        <div class="site-header__bar">
+          <a class="brand" href={homeHref}>
+            <img
+              class="brand__mark"
+              src={siteConfig.markLogo}
+              alt={logoAlt}
+              width="1698"
+              height="926"
+            />
+            <span class="brand__text">{dict.brand}</span>
+          </a>
+
+          <div class="language-toggle" aria-label={dict.languageToggleLabel}>
+            <a
+              class:list={[
+                "language-toggle__link",
+                locale === "en" && "is-active",
+              ]}
+              href={englishHref}
+              aria-current={locale === "en" ? "page" : undefined}
+            >
+              {dict.english}
+            </a>
+            <a
+              class:list={[
+                "language-toggle__link",
+                locale === "fr" && "is-active",
+              ]}
+              href={frenchHref}
+              aria-current={locale === "fr" ? "page" : undefined}
+            >
+              {dict.french}
+            </a>
+          </div>
+        </div>
+
+        <nav class="site-nav" aria-label="Primary">
+          {
+            navOrder.map((item) => (
+              <a
+                href={getPath(locale, item, { localizedEnglish: true })}
+                class:list={["site-nav__link", routeKey === item && "is-current"]}
+                aria-current={routeKey === item ? "page" : undefined}
+              >
+                {dict.pageTitles[item]}
+              </a>
+            ))
+          }
+        </nav>
+      </header>
+
+      <main class="site-main">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__brand">
+          <img
+            src={siteConfig.markLogo}
+            alt={logoAlt}
+            width="1698"
+            height="926"
+          />
+          <p>{dict.footer}</p>
+        </div>
+        <div class="site-footer__links">
+          {
+            navOrder.map((item) => (
+              <a href={getPath(locale, item, { localizedEnglish: true })}>
+                {dict.pageTitles[item]}
+              </a>
+            ))
+          }
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

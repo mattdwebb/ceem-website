@@ -1,0 +1,33 @@
+---
+import Layout from "./Layout.astro";
+import PageIntro from "./PageIntro.astro";
+
+import { getDictionary, siteConfig } from "../data/site";
+import type { Locale } from "../data/types";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getDictionary(locale);
+---
+
+<Layout
+  locale={locale}
+  routeKey="contact"
+  title={dict.pageTitles.contact}
+  description={dict.pageIntro.contact}
+>
+  <PageIntro title={dict.pageTitles.contact} intro={dict.pageIntro.contact} />
+
+  <section class="contact-grid">
+    <article class="contact-card">
+      <p class="contact-card__label">{dict.contact.mailUs}</p>
+      <a class="contact-card__email" href={`mailto:${siteConfig.contactEmail}`}>
+        {siteConfig.contactEmail}
+      </a>
+      <p>{dict.contact.directEmailNote}</p>
+    </article>
+  </section>
+</Layout>
