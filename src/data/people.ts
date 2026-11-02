@@ -278,9 +278,9 @@ export const people: Person[] = [
     memberships: ["cirp"],
     affiliation: "Immigration, Refugees and Citizenship Canada",
     bioEn:
-      "Senior Policy Analyst at Immigration, Refugees and Citizenship Canada. He works closely with CIRP on housing, immigration data, and the economic impacts of two-step immigration.",
+      "Senior Advisor at Immigration, Refugees and Citizenship Canada. He works closely with CIRP on housing, immigration data, and the economic impacts of two-step immigration.",
     bioFr:
-      "Analyste principal des politiques à Immigration, Réfugiés et Citoyenneté Canada. Il travaille étroitement avec le PCRI sur le logement, les données sur l’immigration et les effets économiques de l’immigration en deux étapes.",
+      "Conseiller principal à Immigration, Réfugiés et Citoyenneté Canada. Il travaille étroitement avec le PCRI sur le logement, les données sur l’immigration et les effets économiques de l’immigration en deux étapes.",
     sortOrder: 20,
   },
   {
