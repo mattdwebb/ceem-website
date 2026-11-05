@@ -63,7 +63,7 @@ export const people: Person[] = [
     name: "Marie Connolly",
     roleGroup: "members",
     roleTitle: "Co-Applicant",
-    memberships: ["cirp"],
+    memberships: ["ceem", "cirp"],
     affiliation: "Université du Québec à Montréal",
     bioEn:
       "Professor of Economics at ESG UQAM. She contributes to Quebec-focused research on temporary and permanent immigration policy across multiple CIRP aims.",
@@ -120,7 +120,7 @@ export const people: Person[] = [
     name: "Stephen Tino",
     roleGroup: "members",
     roleTitle: "Co-Applicant",
-    memberships: ["cirp"],
+    memberships: ["ceem", "cirp"],
     affiliation: "Toronto Metropolitan University",
     bioEn:
       "Assistant Professor of Economics at Toronto Metropolitan University. His research in labour and immigration economics supports multiple CIRP projects on Canadian immigration policy.",
@@ -135,7 +135,7 @@ export const people: Person[] = [
     name: "Casey Warman",
     roleGroup: "members",
     roleTitle: "Co-Applicant",
-    memberships: ["cirp"],
+    memberships: ["ceem", "cirp"],
     affiliation: "Dalhousie University",
     bioEn:
       "Professor of Economics at Dalhousie University. He helps lead work on health care, housing, and broader societal outcomes connected to immigration.",
@@ -275,7 +275,7 @@ export const people: Person[] = [
     name: "Haozhen Zhang",
     roleGroup: "members",
     roleTitle: "Collaborator",
-    memberships: ["cirp"],
+    memberships: ["ceem", "cirp"],
     affiliation: "Immigration, Refugees and Citizenship Canada",
     bioEn:
       "Senior Advisor at Immigration, Refugees and Citizenship Canada. He works closely with CIRP on housing, immigration data, and the economic impacts of two-step immigration.",

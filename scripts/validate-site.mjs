@@ -30,6 +30,7 @@ assert(people.filter((person) => person.memberships.includes("cirp")).length ===
 const sharedIds = new Set([
   "christopher-worswick", "matthew-webb", "mikal-skuterud", "louis-philippe-beland",
   "david-green", "saul-schwartz", "tahreen-zahra", "sunny-karim",
+  "marie-connolly", "haozhen-zhang", "casey-warman", "stephen-tino",
 ]);
 const ceemOnlyIds = new Set(["tony-fang", "meredith-lilly"]);
 for (const person of people) {
