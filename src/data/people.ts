@@ -261,7 +261,7 @@ export const people: Person[] = [
     name: "Saul Schwartz",
     roleGroup: "members",
     roleTitle: "Collaborator",
-    memberships: ["cirp"],
+    memberships: ["ceem", "cirp"],
     affiliation: "Carleton University",
     bioEn:
       "Distinguished Research Professor in the School of Public Policy and Administration at Carleton University. He contributes especially to research on international students and two-step immigration.",

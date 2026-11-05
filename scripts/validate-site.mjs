@@ -29,7 +29,7 @@ assert(new Set(people.map((person) => person.id)).size === people.length, "Dupli
 assert(people.filter((person) => person.memberships.includes("cirp")).length === 22, "Unexpected CIRP roster size");
 const sharedIds = new Set([
   "christopher-worswick", "matthew-webb", "mikal-skuterud", "louis-philippe-beland",
-  "david-green", "tahreen-zahra", "sunny-karim",
+  "david-green", "saul-schwartz", "tahreen-zahra", "sunny-karim",
 ]);
 const ceemOnlyIds = new Set(["tony-fang", "meredith-lilly"]);
 for (const person of people) {
