@@ -69,7 +69,7 @@ export const people: Person[] = [
       "Professor of Economics at ESG UQAM. She contributes to Quebec-focused research on temporary and permanent immigration policy across multiple CIRP aims.",
     bioFr:
       "Professeure d’économie à l’ESG UQAM. Elle contribue aux recherches axées sur le Québec concernant les politiques d’immigration temporaire et permanente dans plusieurs axes du PCRI.",
-    profileUrl: "https://professeurs.uqam.ca/professeur/connolly.marie",
+    profileUrl: "https://connolly.uqam.ca",
     sortOrder: 5,
   },
   {
